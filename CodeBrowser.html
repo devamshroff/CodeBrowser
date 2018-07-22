@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>CodeBrowser</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+        </script>
+        
+        
+        <link rel="stylesheet" type="text/css" href="CodeBrowser.css">
+        
+        <script src="CodeBrowser.js"></script>
+        
+    </head>
+    <body>
+        
+        <div id = "navbar">
+            <div id  = "logo">
+            CodeBrowser
+            </div>
+            <div id= "options">
+                <div class="toggleButton active" id="html">HTML</div>
+                <div class="toggleButton" id="css">CSS</div>
+                <div class="toggleButton" id="javascript">Javascript</div>
+                <div class="toggleButton active" id="output">Output</div>
+            </div>
+        </div>
+        
+        <div id = "container">
+        
+            <textarea class = "panel" id = "htmlPanel" placeholder="Insert HTML Here"></textarea>
+            <textarea class = "panel hidden" id = "cssPanel" placeholder="Insert CSS Here"></textarea>
+            <textarea class = "panel hidden" id = "javascriptPanel" placeholder="Insert Javascript Here"> </textarea>
+            <iframe class = "panel" id = "outputPanel"></iframe>
+            
+        </div>        
+        
+        <script type="text/javascript">
+            
+        
+            
+function updateOutput(){
+                        
+            $("iframe").contents().find("html").html("<html><head><style type ='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val()  + "</body></html>"); 
+            
+            document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+            
+            
+        }
+            
+        $(".toggleButton").hover(function(){
+            $(this).addClass("highlightButton");
+        },
+            function(){
+            $(this).removeClass("highlightButton");   
+        });
+            
+        $(".toggleButton").click(function(){
+            
+            $(this).toggleClass("active");
+            $(this).removeClass("highlightButton");
+            
+            var panelID = $(this).attr("id") + "Panel";
+           
+            $("#" + panelID).toggleClass("hidden"); //toggle hidden
+            
+            var activeItems = 4 - $('.hidden').length;
+            
+            $(".panel").width(($(window).width() / activeItems) - 10);
+            
+        });
+            
+        $(".panel").css("height",$(window).height() - $("#navbar").height() -15);
+            
+        $(".panel").css("width",$(window).width() / 2 - 10);
+        
+       updateOutput(); $("iframe").contents().find("html").html($("#htmlPanel").val());
+        $("textarea").on('change keyup paste', function() {
+                updateOutput();
+            
+        });
+            
+        </script>
+        
+    </body>
+</html>
